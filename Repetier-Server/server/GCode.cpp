@@ -258,6 +258,8 @@ GCodeDataPacket* GCode::getAscii(bool inclLine,bool inclChecksum)
             st+=" "+text;
         }
     }
+    if(hasM() && (m==117))
+        inclChecksum = false;
     if (inclChecksum)
     {
         int check = 0;
@@ -269,9 +271,10 @@ GCodeDataPacket* GCode::getAscii(bool inclLine,bool inclChecksum)
         sprintf(b," *%d",(int)check);
         st +=b;
     }
-    uint8_t *dp = new uint8_t[st.length()+1];
-    memcpy(dp,st.c_str(),st.length()+1);
-    return new GCodeDataPacket((int)st.length()+1,dp);
+    st+='\n';
+    uint8_t *dp = new uint8_t[st.length()];
+    memcpy(dp,st.c_str(),st.length());
+    return new GCodeDataPacket((int)st.length(),dp);
 }
 void GCode::ActivateV2OrForceAscii(Printer *printer)
 {

@@ -144,8 +144,8 @@ function updatePrinterList(data) {
 function refreshPrinterList() {
 	$.getJSON('/printer/list', function(data) {
 		updatePrinterList(data);
-  	setTimeout('refreshPrinterList()', 10000);
 	});
+	setTimeout('refreshPrinterList()', 10000);
 };
 $(document).ready(function() {
    refreshPrinterList();

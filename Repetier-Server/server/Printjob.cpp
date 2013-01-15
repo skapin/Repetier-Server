@@ -65,7 +65,7 @@ PrintjobManager::PrintjobManager(string dir,Printer *_prt,bool _scripts) {
         sort(v.begin(), v.end());
         if(scripts) {
             bool hasStart = false,hasEnd = false,hasPause=false,hasKill=false;
-            bool hasScript1=false,hasScript2=false,hasScript3=false,hasScript4=false,hasScript5;
+            bool hasScript1=false,hasScript2=false,hasScript3=false,hasScript4=false,hasScript5=false;
             for (pvec::const_iterator it (v.begin()); it != v.end(); ++it)
             {
                 PrintjobPtr pj(new Printjob((*it).string(),false));

@@ -298,7 +298,7 @@ namespace repetier {
                     }
                 }
                 printer->getJobManager()->fillSJONObject("data",ret);
-            } else if(a=="kill") {
+            } else if(a=="stop") {
                 string sid;
                 if(MG_getVar(ri,"id",sid)) {
                     int id = atoi(sid.c_str());
@@ -381,7 +381,7 @@ namespace repetier {
                         out << text;
                         out.close();
                     } catch(std::exception &ex) {
-                        RLog::log("Error writing script: @",ex.what());
+                        RLog::log("Error writing script: @",static_cast<const string>(ex.what()));
                     }
                 } else if(a=="load") {
                     string name;
@@ -401,7 +401,7 @@ namespace repetier {
                                 }
                                 in.close();
                             } catch(std::exception &ex) {
-                                RLog::log("Error reading script: @",ex.what());
+                                RLog::log("Error reading script: @",static_cast<string>(ex.what()));
                             }
                         }
                     }

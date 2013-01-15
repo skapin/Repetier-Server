@@ -11,7 +11,9 @@
 #endif
 #include "RLog.h"
 #include "global_config.h"
-
+#if defined(_WIN32) && !defined(__SYMBIAN32__)
+#include <windows.h>
+#endif
 using namespace std;
 
 RLog rlog;
@@ -31,6 +33,12 @@ void RLog::log(const std::string &line,bool err) {
         cout << line << endl;
         return;
     }
+#if defined(_WIN32) && !defined(__SYMBIAN32__)
+	//if(err)
+		//WriteEventLogEntry(line.c_str(), EVENTLOG_ERROR_TYPE);
+	//else
+		//WriteEventLogEntry(line.c_str(),  EVENTLOG_INFORMATION_TYPE);
+#endif
 #ifdef __unix
     if(err)
         syslog (LOG_ERR, "%s",line.c_str());

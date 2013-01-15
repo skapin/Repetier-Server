@@ -4,6 +4,10 @@ should work as well. For makefile creation the platform independent CMake is use
 
 Linux / Raspberry Pi walkthrough
 
+Info for Raspberry PI users with 256MB: The software will not compile due to your memory
+      limit. Please use a precompiled version for the pi instead. You will find all
+      binaries on http://www.repetier.com in the download section for Repetier-Server.
+
 Installing required software:
 
 I assume a fresh Wheezy image on a raspberry pi. On other linux systems you might also
