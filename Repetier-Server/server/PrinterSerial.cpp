@@ -39,12 +39,9 @@ using namespace std;
 void PrinterSerialPort::set_baudrate(int baud) {
     try {
 #ifdef __APPLE__
-        
-        //  boost::asio::detail::reactive_serial_port_service::implementation_type& impl = get_implementation();
         termios ios;
         asio::detail::reactive_descriptor_service::implementation_type &rs = get_implementation();
         int handle = get_service().native_handle(rs);
-        //int handle =  (int)native_handle();
         ::tcgetattr(handle, &ios);
         ::cfsetspeed(&ios, baud);
         speed_t newSpeed = baud;
@@ -59,22 +56,6 @@ void PrinterSerialPort::set_baudrate(int baud) {
             termios ios;
             asio::detail::reactive_descriptor_service::implementation_type &rs = get_implementation();
             int handle = get_service().native_handle(rs);
-/*
-#define    BOTHER 0010000
-            
-            struct termios2 ios2;
-            ioctl(handle, TCGETS2, &ios2);
-            ios2.c_ospeed = ios2.c_ispeed = 543210;
-            ios2.c_cflag &= ~CBAUD;
-            ios2.c_cflag |= BOTHER;
-            ioctl(handle, TCSETS2, &ios2);
-            
-            ::tcgetattr(handle, &ios);
-            ::cfsetispeed(&ios, baud);
-            ::cfsetospeed(&ios, baud);
-            speed_t newSpeed = baud;
-            //ioctl(handle, IOSSIOSPEED, &newSpeed);
-            ::tcsetattr(handle, TCSANOW, &ios);*/
 
             ::tcgetattr(handle, &ios);
             ::cfsetispeed(&ios, B38400);
@@ -133,7 +114,6 @@ void PrinterSerialPort::debugTermios() {
 #ifdef __APPLE__
 #ifdef DEBUGTERM
     termios ios;
-    //  int handle = (int)native_handle();
     asio::detail::reactive_descriptor_service::implementation_type &rs = get_implementation();
     int handle = get_service().native_handle(rs);
     ::tcgetattr(handle, &ios);
@@ -173,6 +153,12 @@ bool PrinterSerial::isConnected() {
 bool PrinterSerial::tryConnect() {
     try {
         if(port.is_open()) port.close();
+        if(io.stopped()) {
+            io.reset();
+            writeBuffer.reset();
+            writeBufferSize=0;
+            writeQueue.clear();
+        }
         setErrorStatus(true);//If an exception is thrown, error_ remains true
         baudrate = asio::serial_port_base::baud_rate(printer->baudrate);
         port.open(printer->device);
@@ -210,10 +196,9 @@ bool PrinterSerial::tryConnect() {
 }
 void PrinterSerial::close() {
     if(!isOpen()) return;
-    open=false;
     io.post(boost::bind(&PrinterSerial::doClose, this));
     backgroundThread.join();
-    io.reset();
+    //io.reset();
     if(errorStatus())
     {
         throw(boost::system::system_error(boost::system::error_code(),
@@ -274,11 +259,12 @@ void PrinterSerial::readEnd(const boost::system::error_code& error,
         //In this case it is not a real error, so ignore
         if(isOpen())
         {
+            RLog::log("error: Reading serial conection failed: @. Closing connection.",error.message());
             doClose();
             setErrorStatus(true);
         }
     } else {
-        int lstart = 0;
+        size_t lstart = 0;
         for(size_t i=0;i<bytes_transferred;i++) {
             char c = readBuffer[i];
             if(c=='\n' || c=='\r') {
@@ -335,12 +321,13 @@ void PrinterSerial::writeEnd(const boost::system::error_code& error)
 }
 void PrinterSerial::doClose()
 {
+    if(!open) return;
+    open = false;
     boost::system::error_code ec;
     port.cancel(ec);
     if(ec) setErrorStatus(true);
     port.close(ec);
     if(ec) setErrorStatus(true);
-    open = false;
     printer->connectionClosed();
     RLog::log("Connection closed: @",printer->name);
 }

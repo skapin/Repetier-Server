@@ -17,6 +17,7 @@ DAEMON=/usr/bin/RepetierServer
 PIDFILE=/var/run/RepetierServer.pid
 CONFIGFILE=/etc/repetier-server.conf
 SERVER_OPTS="-c $CONFIGFILE --daemon"
+export LC_ALL=C
 
 test -x $DAEMON || exit 5
 

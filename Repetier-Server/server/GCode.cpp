@@ -205,42 +205,42 @@ GCodeDataPacket* GCode::getAscii(bool inclLine,bool inclChecksum)
         }
         if (hasX())
         {
-            sprintf(b," X%.2g ",x);
+            sprintf(b," X%.2f ",x);
             st+=b;
         }
         if (hasY())
         {
-            sprintf(b," Y%.2g ",y);
+            sprintf(b," Y%.2f ",y);
             st+=b;
         }
         if (hasZ())
         {
-            sprintf(b," Z%.2g ",z);
+            sprintf(b," Z%.2f ",z);
             st+=b;
         }
         if (hasE())
         {
-            sprintf(b," E%.4g ",e);
+            sprintf(b," E%.4f ",e);
             st+=b;
         }
         if (hasF())
         {
-            sprintf(b," F%.2g ",f);
+            sprintf(b," F%.2f ",f);
             st+=b;
         }
         if (hasI())
         {
-            sprintf(b," I%.2g ",ii);
+            sprintf(b," I%.2f ",ii);
             st+=b;
         }
         if (hasJ())
         {
-            sprintf(b," J%.2g ",j);
+            sprintf(b," J%.2f ",j);
             st+=b;
         }
         if (hasR())
         {
-            sprintf(b," R%.2g ",r);
+            sprintf(b," R%.2f ",r);
             st+=b;
         }
         if (hasS())

@@ -70,6 +70,23 @@ Now your start script is active on next reboot. To start/stop manually use
 > sudo /etc/init.d/Repetier-Server start
 > sudo /etc/init.d/Repetier-Server stop
 
+Troubleshooting:
+
+If you have problems check the syslog or start the server directly without the --daemon
+parameter to see the error output.
+
+Some people had problems with the boost::filesystem library used. If you get errors like:
+#	terminate called after throwing an instance of 'std::runtime_error'
+# what(): locale::facet::_S_create_c_locale name not valid
+You need to set the locale like this:
+> export LC_ALL=C
+The init script already contains this command, so this is only an issue if you are
+running the server manually.
+
+Connection speed in linux not supported:
+I have used some tricks to allow non ansi baud rates. But these are not supported in a 
+straight manner by linux. It is more that I manually change some internal settings. For
+some printer this works and for some not. So if 250000 baud does not work try 115200.
 
 ================== OS Dependent hints =====================
 
@@ -78,7 +95,7 @@ Now your start script is active on next reboot. To start/stop manually use
 The device name /dev/ttyUSBxx may change depending on the order the printer is enabled.
 Use instead the /dev(serial/by-id name like this for a device:
 /dev/serial/by-id/usb-FTDI_FT232R_USB_UART_A800f4AP-if00-port0
-At least if you always use the save ports/hub ports. Of create a mapping to a individual
+At least if you always use the save ports/hub ports. Or create a mapping to a individual
 name with udevadm.
 
 === Windows ===

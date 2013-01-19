@@ -89,7 +89,6 @@ case SIGTERM:
 
 int main(int argc, const char * argv[])
 {
-    cout << "Starting Repetier-Server version " << REPETIER_SERVER_VERSION << endl;
 	// Declare the supported options.
 	po::options_description desc("Allowed options");
 	desc.add_options()
@@ -107,11 +106,13 @@ int main(int argc, const char * argv[])
 	try {
 		po::store(po::parse_command_line(argc, argv, desc), vm);
 	} catch(std::exception &ex) {
+        cerr << "Repetier-Server version " << REPETIER_SERVER_VERSION << endl;
 		cerr << "error: Error parsing command line: " << ex.what() << endl;
 	}
 	po::notify(vm);
 
 	if (vm.count("help")) {
+        cout << "Repetier-Server version " << REPETIER_SERVER_VERSION << endl;
 		cout << desc << "\n";
 		return 1;
 	}
@@ -122,6 +123,7 @@ int main(int argc, const char * argv[])
 	if(confFile.length() == 0) confFile = string("/etc/repetier-server.conf");
 	boost::filesystem::path cf(confFile);
 	if(!boost::filesystem::exists(cf) || !boost::filesystem::is_regular_file(cf)) {
+        cerr << "Repetier-Server version " << REPETIER_SERVER_VERSION << endl;
 		cerr << "Configuration file not found at " << confFile << endl;
 		cerr << "Please use config option with correct path" << endl;
 		cerr << desc << endl;
