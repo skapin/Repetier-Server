@@ -25,6 +25,7 @@
 #include <vector>
 #include "printer.h"
 #include "global_config.h"
+#include "RLog.h"
 
 using namespace std;
 using namespace boost;
@@ -255,7 +256,10 @@ void PrintjobManager::startJob(int id) {
     if(!runningJob.get()) return; // unknown job
     runningJob->setRunning();
     runningJob->start();
+    printer->getScriptManager()->pushCompleteJob("Start");
     jobin.open(runningJob->getFilename().c_str(),ifstream::in);
+    if(!jobin.good())
+        RLog::log("Failed to open job file @",runningJob->getFilename());
 }
 void PrintjobManager::killJob(int id) {
     mutex::scoped_lock l(filesMutex);
@@ -266,6 +270,9 @@ void PrintjobManager::killJob(int id) {
     files.remove(runningJob);
     remove(path(runningJob->getFilename())); // Delete file from disk
     runningJob.reset();
+    mutex::scoped_lock l2(printer->sendMutex); // Remove buffered commands
+    printer->jobCommands.clear();
+    l2.unlock();
     printer->getScriptManager()->pushCompleteJob("End");
 }
 void PrintjobManager::undoCurrentJob() {

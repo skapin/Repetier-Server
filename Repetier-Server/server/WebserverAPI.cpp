@@ -293,7 +293,6 @@ namespace repetier {
                     int id = atoi(sid.c_str());
                     PrintjobPtr job = printer->getJobManager()->findById(id);
                     if(job.get()) {
-                        printer->getScriptManager()->pushCompleteJob("Start");
                         printer->getJobManager()->startJob(id);
                     }
                 }
@@ -350,6 +349,8 @@ namespace repetier {
                             std::ifstream  src(model->getFilename().c_str());
                             std::ofstream  dst(job->getFilename().c_str());
                             dst << src.rdbuf();
+                            dst.close();
+                            src.close();
                             printer->getJobManager()->finishPrintjobCreation(job, model->getName(), model->getLength());
                         } catch(const std::exception& ex)
                     {
