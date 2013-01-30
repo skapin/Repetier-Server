@@ -237,10 +237,19 @@ void PrintjobManager::finishPrintjobCreation(PrintjobPtr job,string namerep,size
         namerep = static_cast<string>(buf);
     }
     string newname = encodeName(job->getId(),namerep,"g", true);
-    rename(job->getFilename(), newname);
-    job->setFilename(newname);
-    job->setLength(sz);
-    job->setStored();
+    try {
+        rename(job->getFilename(), newname);
+        job->setFilename(newname);
+        job->setLength(sz);
+        job->setStored();
+    } catch(std::exception e) {
+        RLog::log("Error creating new job: @",e.what());
+        string msg= static_cast<string>("Error creating new job: ")+e.what();
+        string answer = static_cast<string>("/printer/msg/")+printer->slugName+
+            static_cast<string>("?a=ok");
+        gconfig->createMessage(msg,answer);
+        files.remove(job);
+    }    
 }
 void PrintjobManager::RemovePrintjob(PrintjobPtr job) {
     mutex::scoped_lock l(filesMutex);
@@ -257,9 +266,14 @@ void PrintjobManager::startJob(int id) {
     runningJob->setRunning();
     runningJob->start();
     printer->getScriptManager()->pushCompleteJob("Start");
+    if(jobin.is_open()) jobin.close();
     jobin.open(runningJob->getFilename().c_str(),ifstream::in);
-    if(!jobin.good())
+    if(!jobin.good()) {
         RLog::log("Failed to open job file @",runningJob->getFilename());
+        string msg= "Failed to open job file "+runningJob->getFilename();
+        string answer = "/printer/msg/"+printer->slugName+"?a=ok";
+        gconfig->createMessage(msg,answer);
+    }
 }
 void PrintjobManager::killJob(int id) {
     mutex::scoped_lock l(filesMutex);
@@ -267,8 +281,14 @@ void PrintjobManager::killJob(int id) {
     if(jobin.is_open() && jobin.eof()) {
         jobin.close();
     }
-    files.remove(runningJob);
-    remove(path(runningJob->getFilename())); // Delete file from disk
+    try {
+        files.remove(runningJob);
+        remove(path(runningJob->getFilename())); // Delete file from disk
+    } catch(std::exception &e) {
+        string msg= "Failed to remove killed job file "+runningJob->getFilename();
+        string answer = "/printer/msg/"+printer->slugName+"?a=ok";
+        gconfig->createMessage(msg,answer);
+    }
     runningJob.reset();
     mutex::scoped_lock l2(printer->sendMutex); // Remove buffered commands
     printer->jobCommands.clear();
@@ -308,7 +328,14 @@ void PrintjobManager::manageJobs() {
         jobin.close();
         files.remove(runningJob);
         runningJob->stop(printer);
-        remove(path(runningJob->getFilename())); // Delete file from disk
+        try {
+            remove(path(runningJob->getFilename())); // Delete file from disk
+        } catch(std::exception) {
+            RLog::log("error: Failed to remove finished job @",runningJob->getFilename());
+            string msg= "Failed to remove finished job file "+runningJob->getFilename();
+            string answer = "/printer/msg/"+printer->slugName+"?a=ok";
+            gconfig->createMessage(msg,answer);
+        }
         runningJob.reset();
         l.unlock();
         printer->scriptManager->pushCompleteJobNoBlock("End");

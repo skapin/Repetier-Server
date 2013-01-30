@@ -58,7 +58,7 @@ void moFileReader::ClearTable()
 
 unsigned int moFileReader::GetNumStrings() const
 {
-    return m_lookup.size();
+    return (int)m_lookup.size();
 }
 
 std::string moFileReader::Lookup( const char* id ) const

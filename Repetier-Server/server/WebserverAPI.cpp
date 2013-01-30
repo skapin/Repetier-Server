@@ -21,6 +21,7 @@
 #include "printer.h"
 #include "json_spirit.h"
 #include <map>
+#include <set>
 #include "moFileReader.h"
 #include <boost/bind.hpp>
 #include <fstream>
@@ -574,18 +575,35 @@ namespace repetier {
             
             if(tp == '#') { // foreach loop
                 string name = text.substr(pos2+1,posclose-pos2-1);
+                size_t spacePos = name.find(' ');
+                string cmd = "";
+                if(spacePos!=string::npos) {
+                    cmd = name.substr(0,spacePos);
+                    name = name.substr(spacePos+1);
+                    pos2+=cmd.length()+1;
+                }
                 string ename = "{{/"+name+"}}";
                 size_t epos = text.find(ename,posclose);
                 pos2+=name.length()+3;
                 posclose = epos+ename.length()-2; // Continue after block
                 Value *v = findVariable(vars,name);
-                if(v!=NULL && v->type()==array_type) {
-                    Array &a = v->get_array();
-                    vector<Value>::iterator it = a.begin(),iend = a.end();
-                    for(;it!=iend;++it) {
-                        vars.push_front(*it);
+                if(cmd.length()==0) {
+                    if(v!=NULL && v->type()==array_type) {
+                        Array &a = v->get_array();
+                        vector<Value>::iterator it = a.begin(),iend = a.end();
+                        for(;it!=iend;++it) {
+                            vars.push_front(*it);
+                            FillTemplateRecursive(text, result, vars, pos2, epos);
+                            vars.pop_front();
+                        }
+                    }
+                } else if(cmd=="if" && v->type()==bool_type) {
+                    if(v->get_bool()) {
                         FillTemplateRecursive(text, result, vars, pos2, epos);
-                        vars.pop_front();
+                    }
+                } else if(cmd=="ifnot" && v->type()==bool_type) {
+                    if(!v->get_bool()) {
+                        FillTemplateRecursive(text, result, vars, pos2, epos);
                     }
                 }
             } else if(tp=='!') { // Comment, simply ignore it
@@ -613,11 +631,35 @@ namespace repetier {
         if(uri.length()<5 || uri.substr(uri.length()-4,4)!=".php") return NULL;        
         
         // Step 1: Find translation file
-        const char *alang = mg_get_header(conn, "Accept-Language");
-        string lang = gconfig->getDefaultLanguage();
+        char *alang = (char*)mg_get_header(conn, "Accept-Language");
+        string lang = "";
         if(alang!=NULL) {
-            
+            size_t n = strlen(alang);
+            int mode = 0;
+            size_t lstart;
+            for(size_t i=0;i<n;i++) {
+                char c = alang[i];
+                if(mode==0 && isspace(c)) continue;
+                if(mode == 0) {
+                    lstart = i;
+                    mode = 1;
+                    continue;
+                }
+                if(mode ==1 && i==lstart+2) {
+                    mode = 2;
+                    alang[i]=0;
+                    string tlang(&alang[lstart]);
+                    alang[i] = c; // restore const value
+                    if(doesLanguageExist(tlang)) {
+                        lang = tlang;
+                        break;
+                    }
+                }
+                if(mode==2 && c==',') mode=0; // next acceptable language
+            }
         }
+        if(lang == "")
+            lang = gconfig->getDefaultLanguage();
         string content;
         TranslateFile(gconfig->getWebsiteRoot()+uri,lang,content);
         // Step 2: Fill template parameter
@@ -638,15 +680,34 @@ namespace repetier {
         mg_write(conn, content2.c_str(), content2.length());
         return (void*)"";
     }
+    static map<string,boost::shared_ptr<moFileLib::moFileReader> > rmap;
+    static set<string> langNotExist;
+    static boost::mutex langMutex;
+    bool doesLanguageExist(string lang) {
+        moFileLib::moFileReader *r = NULL;
+        if((rmap[lang].get()) == NULL) {
+            boost::mutex::scoped_lock l(langMutex);
+            if(langNotExist.size()>0 && langNotExist.find(lang)==langNotExist.end())
+                return false;
+            string mofile = gconfig->getLanguageDir()+lang+".mo";
+            if(!boost::filesystem::exists(mofile)) {
+                langNotExist.insert(lang);
+                return false;
+            }
+            r = new moFileLib::moFileReader();
+            r->ReadFile(mofile.c_str());
+            rmap[lang].reset(r);
+            return true;
+        } else return true;
+        
+    }
     void TranslateFile(const std::string &filename,const std::string &lang,std::string& result) {
-        static map<string,boost::shared_ptr<moFileLib::moFileReader> > rmap;
         result.clear();
         
         // read mo file if not cached
         moFileLib::moFileReader *r = NULL;
         if((rmap[lang].get()) == NULL) {
-            static boost::mutex mutex;
-            boost::mutex::scoped_lock l(mutex);
+            boost::mutex::scoped_lock l(langMutex);
             string mofile = gconfig->getLanguageDir()+lang+".mo";
             if(!boost::filesystem::exists(mofile))
                 mofile = gconfig->getLanguageDir()+gconfig->getDefaultLanguage()+".mo";
@@ -661,7 +722,7 @@ namespace repetier {
 		if (in.good())
         {
             in.seekg(0, std::ios::end);
-            contents.resize(in.tellg());
+            contents.resize((size_t)in.tellg());
             in.seekg(0, std::ios::beg);
 			in.read(&contents[0], contents.size());
 			in.close();

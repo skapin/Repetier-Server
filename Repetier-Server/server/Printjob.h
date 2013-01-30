@@ -46,7 +46,7 @@ public:
     inline void setRunning() {state = running;}
     inline PrintjobState getState() {return state;}
     inline void setLength(size_t l) {length = l;}
-    inline void setPos(size_t p) {pos = p;}
+    inline void setPos(long long p) {pos = p;}
     inline double percentDone() {return 100.0*pos/(double)length;}
     inline void incrementLinesSend() {linesSend++;}
     void start();
@@ -56,7 +56,7 @@ private:
     int id;
     std::string file;
     size_t length; ///< Length of the print file
-    size_t pos; ///< Send until this position
+    long long pos; ///< Send until this position
     PrintjobState state;
     int linesSend;
     boost::posix_time::ptime time;

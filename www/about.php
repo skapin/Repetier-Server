@@ -2,6 +2,9 @@
 <html>
 <head>
 <meta charset="utf-8"/>
+<link rel="apple-touch-icon" href="/touch-icon-iphone.png" />
+<link rel="apple-touch-icon" sizes="72x72" href="/touch-icon-ipad.png" />
+<link rel="apple-touch-icon" sizes="114x114" href="/touch-icon-iphone4.png" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="/bt/css/bootstrap.css" rel="stylesheet">
     <link rel="stylesheet" href="/bt/css/font-awesome.css">
@@ -166,6 +169,16 @@ except in compliance with the License. You may obtain a copy of the License in t
 License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
 either express or implied. See the License for the specific language governing
 permissions and limitations under the License.</p>
+
+<h3>Font Awesome</h3>
+<p>Homepage: <a href="http://jquery.com/" target="_blank">http://fortawesome.github.com/Font-Awesome/</a></p>
+<p>Licence: SIL Open Font License</p>
+<ul>
+<li>The Font Awesome font is licensed under the SIL Open Font License - http://scripts.sil.org/OFL.</li>
+<li>Font Awesome CSS, LESS, and SASS files are licensed under the MIT License - http://opensource.org/licenses/mit-license.html.</li>
+<li>The Font Awesome pictograms are licensed under the CC BY 3.0 License - http://creativecommons.org/licenses/by/3.0/</li>
+<li>Attribution is no longer required in Font Awesome 3.0, but much appreciated: Font Awesome by Dave Gandy - http://fortawesome.github.com/Font-Awesome.</li>
+</ul>
 
 <h3>jQuery</h3>
 

@@ -28,6 +28,8 @@
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include "json_spirit_value.h"
 #include <boost/cstdint.hpp>
+#include "GCode.h"
+
 using namespace boost;
 
 #define MAX_HISTORY_SIZE 50
@@ -109,7 +111,7 @@ class Printer {
      @params dp data packet to send.
      @params gc gcode to save in history.
      @returns true on success. */
-    bool trySendPacket(GCodeDataPacket *dp,boost::shared_ptr<GCode> &gc);
+    bool trySendPacket(GCodeDataPacketPtr &dp,boost::shared_ptr<GCode> &gc);
     void trySendNextLine(); // Send another line if possible
     void close();
     /** If a line contains a host command starting with @ it is handled in
@@ -123,6 +125,7 @@ public:
     double zmin,zmax;
     double homex,homey,homez;
     double speedx,speedy,speedz,speedeExtrude,speedeRetract;
+    bool hasHeatedBed;
     std::string name;
     std::string slugName;
     

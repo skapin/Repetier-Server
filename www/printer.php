@@ -2,6 +2,9 @@
 <html>
 <head>
 <meta charset="utf-8"/>
+<link rel="apple-touch-icon" href="/touch-icon-iphone.png" />
+<link rel="apple-touch-icon" sizes="72x72" href="/touch-icon-ipad.png" />
+<link rel="apple-touch-icon" sizes="114x114" href="/touch-icon-iphone4.png" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="/bt/css/bootstrap.css" rel="stylesheet">
     <link rel="stylesheet" href="/bt/css/font-awesome.css">
@@ -205,47 +208,50 @@
       </div>
 			<div id="movepos" class="collapse">
 				<div class="row" style="margin-top:8px">
-					<button class="btn span1 btn-success inputonline notprinting" onclick="sendCmd('G28 X0')"><i class="icon-home"></i> X</button>
-					<button class="btn span1 btn-success inputonline notprinting" onclick="sendMove(-50,0,0,0)"><i class="icon-arrow-left"></i> -50</button>
-					<button class="btn span1 btn-success inputonline notprinting" onclick="sendMove(-10,0,0,0)"><i class="icon-arrow-left"></i> -10</button>
-					<button class="btn span1 btn-success inputonline notprinting" onclick="sendMove(-1,0,0,0)"><i class="icon-arrow-left"></i> -1</button>
-					<button class="btn span1 btn-success inputonline notprinting" onclick="sendMove(-0.1,0,0,0)"><i class="icon-arrow-left"></i> -0.1</button>
-					<button class="btn span1 btn-success inputonline notprinting" onclick="sendMove(0.1,0,0,0)"><i class="icon-arrow-right"></i> 0.1</button>
-					<button class="btn span1 btn-success inputonline notprinting" onclick="sendMove(1,0,0,0)"><i class="icon-arrow-right"></i> 1</button>
-					<button class="btn span1 btn-success inputonline notprinting" onclick="sendMove(10,0,0,0)"><i class="icon-arrow-right"></i> 10</button>
-					<button class="btn span1 btn-success inputonline notprinting" onclick="sendMove(50,0,0,0)"><i class="icon-arrow-right"></i> 50</button>
+					<button class="btn span1 btn-success inputonline notprinting" onclick="sendCmd('G28 X0')"><i class="icon-home"></i><br/>X</button>
+					<button class="btn span1 btn-success inputonline notprinting" onclick="sendMove(-50,0,0,0)"><i class="icon-arrow-left"></i><br/>-50</button>
+					<button class="btn span1 btn-success inputonline notprinting" onclick="sendMove(-10,0,0,0)"><i class="icon-arrow-left"></i><br/>-10</button>
+					<button class="btn span1 btn-success inputonline notprinting" onclick="sendMove(-1,0,0,0)"><i class="icon-arrow-left"></i><br/>-1</button>
+					<button class="btn span1 btn-success inputonline notprinting" onclick="sendMove(-0.1,0,0,0)"><i class="icon-arrow-left"></i><br/>-0.1</button>
+					<button class="btn span1 btn-success inputonline notprinting" onclick="sendMove(0.1,0,0,0)"><i class="icon-arrow-right"></i><br/>0.1</button>
+					<button class="btn span1 btn-success inputonline notprinting" onclick="sendMove(1,0,0,0)"><i class="icon-arrow-right"></i><br/>1</button>
+					<button class="btn span1 btn-success inputonline notprinting" onclick="sendMove(10,0,0,0)"><i class="icon-arrow-right"></i><br/>10</button>
+					<button class="btn span1 btn-success inputonline notprinting" onclick="sendMove(50,0,0,0)"><i class="icon-arrow-right"></i><br/>50</button>
 				</div>
 				<div class="row" style="margin-top:8px">
-					<button class="btn span1 btn-info inputonline notprinting" onclick="sendCmd('G28 Y0')"><i class="icon-home"></i> Y</button>
-					<button class="btn span1 btn-info inputonline notprinting" onclick="sendMove(0,-50,0,0)"><i class="icon-arrow-down"></i> -50</button>
-					<button class="btn span1 btn-info inputonline notprinting" onclick="sendMove(0,-10,0,0)"><i class="icon-arrow-down"></i> -10</button>
-					<button class="btn span1 btn-info inputonline notprinting" onclick="sendMove(0,-1,0,0)"><i class="icon-arrow-down"></i> -1</button>
-					<button class="btn span1 btn-info inputonline notprinting" onclick="sendMove(0,-0.1,0,0)"><i class="icon-arrow-down"></i> -0.1</button>
-					<button class="btn span1 btn-info inputonline notprinting" onclick="sendMove(0,0.1,0,0)"><i class="icon-arrow-up"></i> 0.1</button>
-					<button class="btn span1 btn-info inputonline notprinting" onclick="sendMove(0,1,0,0)"><i class="icon-arrow-up"></i> 1</button>
-					<button class="btn span1 btn-info inputonline notprinting" onclick="sendMove(0,10,0,0)"><i class="icon-arrow-up"></i> 10</button>
-					<button class="btn span1 btn-info inputonline notprinting" onclick="sendMove(0,50,0,0)"><i class="icon-arrow-up"></i> 50</button>
+					<button class="btn span1 btn-info inputonline notprinting" onclick="sendCmd('G28 Y0')"><i class="icon-home"></i><br/>Y</button>
+					<button class="btn span1 btn-info inputonline notprinting" onclick="sendMove(0,-50,0,0)"><i class="icon-arrow-down"></i><br/>-50</button>
+					<button class="btn span1 btn-info inputonline notprinting" onclick="sendMove(0,-10,0,0)"><i class="icon-arrow-down"></i><br/>-10</button>
+					<button class="btn span1 btn-info inputonline notprinting" onclick="sendMove(0,-1,0,0)"><i class="icon-arrow-down"></i><br/>-1</button>
+					<button class="btn span1 btn-info inputonline notprinting" onclick="sendMove(0,-0.1,0,0)"><i class="icon-arrow-down"></i><br/>-0.1</button>
+					<button class="btn span1 btn-info inputonline notprinting" onclick="sendMove(0,0.1,0,0)"><i class="icon-arrow-up"></i><br/>0.1</button>
+					<button class="btn span1 btn-info inputonline notprinting" onclick="sendMove(0,1,0,0)"><i class="icon-arrow-up"></i><br/>1</button>
+					<button class="btn span1 btn-info inputonline notprinting" onclick="sendMove(0,10,0,0)"><i class="icon-arrow-up"></i><br/>10</button>
+					<button class="btn span1 btn-info inputonline notprinting" onclick="sendMove(0,50,0,0)"><i class="icon-arrow-up"></i><br/>50</button>
 				</div>
 				<div class="row" style="margin-top:8px">
-					<button class="btn span1 btn-info inputonline notprinting" onclick="sendCmd('G28 Z0')"><i class="icon-home"></i> Z</button>
-					<button class="btn span1 btn-info inputonline notprinting" onclick="sendMove(0,0,-10,0)"><i class="icon-arrow-down"></i> -10</button>
-					<button class="btn span1 btn-info inputonline notprinting" onclick="sendMove(0,0,-1,0)"><i class="icon-arrow-down"></i> -1</button>
-					<button class="btn span1 btn-info inputonline notprinting" onclick="sendMove(0,0,-0.1,0)"><i class="icon-arrow-down"></i> -0.1</button>
-					<button class="btn span1 btn-info inputonline notprinting" onclick="sendMove(0,0,-0.01,0)"><i class="icon-arrow-down"></i>-0.01</button>
-					<button class="btn span1 btn-info inputonline notprinting" onclick="sendMove(0,0,0.01,0)"><i class="icon-arrow-up"></i> 0.01</button>
-					<button class="btn span1 btn-info inputonline notprinting" onclick="sendMove(0,0,0.1,0)"><i class="icon-arrow-up"></i> 0.1</button>
-					<button class="btn span1 btn-info inputonline notprinting" onclick="sendMove(0,0,1,0)"><i class="icon-arrow-up"></i> 1</button>
-					<button class="btn span1 btn-info inputonline notprinting" onclick="sendMove(0,0,10,0)"><i class="icon-arrow-up"></i> 10</button>
+					<button class="btn span1 btn-inverse inputonline notprinting" onclick="sendCmd('G28 Z0')"><i class="icon-home"></i><br/>Z</button>
+					<button class="btn span1 btn-inverse inputonline notprinting" onclick="sendMove(0,0,-10,0)"><i class="icon-arrow-right"></i><i class="icon-arrow-left"></i><br/>-10</button>
+					<button class="btn span1 btn-inverse inputonline notprinting" onclick="sendMove(0,0,-1,0)"><i class="icon-arrow-right"></i><i class="icon-arrow-left"></i><br/>-1</button>
+					<button class="btn span1 btn-inverse inputonline notprinting" onclick="sendMove(0,0,-0.1,0)"><i class="icon-arrow-right"></i><i class="icon-arrow-left"></i><br/>-0.1</button>
+					<button class="btn span1 btn-inverse inputonline notprinting" onclick="sendMove(0,0,-0.01,0)"><i class="icon-arrow-right"></i><i class="icon-arrow-left"></i><br/>-0.01</button>
+					<button class="btn span1 btn-inverse inputonline notprinting" onclick="sendMove(0,0,0.01,0)"><i class="icon-arrow-left"></i><i class="icon-arrow-right"></i><br/>0.01</button>
+					<button class="btn span1 btn-inverse inputonline notprinting" onclick="sendMove(0,0,0.1,0)"><i class="icon-arrow-left"></i><i class="icon-arrow-right"></i><br/>0.1</button>
+					<button class="btn span1 btn-inverse inputonline notprinting" onclick="sendMove(0,0,1,0)"><i class="icon-arrow-left"></i><i class="icon-arrow-right"></i><br/>1</button>
+					<button class="btn span1 btn-inverse inputonline notprinting" onclick="sendMove(0,0,10,0)"><i class="icon-arrow-left"></i><i class="icon-arrow-right"></i><br/>10</button>
+				</div>
+				<div class="row" style="margin-top:8px">
+					<button class="btn span2 inputonline notprinting" onclick="sendCmd('M84')"><?php _("Turn Motor off")?></button>
 				</div>
 			</div>
 			<div style="margin-top:10px"></div>
 			<div class="row">
 			<span class="span2" style="line-height:40px"><?php _("Speed:")?> <span id="speedval">100</span>%</span>
-		  <form id="formspeed" class="navbar-form pull-left span2"><div class="input-append"><input id="newspeed" type="text" style="width:40px" class="inputonline"/> <button id="sendspeed" class="btn "><i class="icon-edit"></i> <?php _("Change")?></button></div></form>
+		  <form id="formspeed" class="navbar-form pull-left span2"><div class="input-append"><input id="newspeed" type="text" style="width:40px" class="inputonline"/> <button id="sendspeed" class="btn inputonline"><i class="icon-edit"></i> <?php _("Change")?></button></div></form>
 			<span class="span2" style="line-height:40px"><?php _("Flow:")?> <span id="flowval">100</span>%</span>
-  		<form id="formflow" class="navbar-form pull-left span2"><div class="input-append"><input id="newflow" type="text" style="width:40px" class="inputonline"/> <button id="sendflow" class="btn "><i class="icon-edit"></i> <?php _("Change")?></button></div></form>
+  		<form id="formflow" class="navbar-form pull-left span2"><div class="input-append"><input id="newflow" type="text" style="width:40px" class="inputonline"/> <button id="sendflow" class="btn inputonline"><i class="icon-edit"></i> <?php _("Change")?></button></div></form>
 			<span class="span2" style="line-height:40px"><?php _("Fan:")?> <span id="fanval"></span></span>
-  		<form id="formfan" class="navbar-form pull-left span2"><div class="input-append"><input id="newfan" type="text" style="width:40px" class="inputonline"/> <button id="sendfan" class="btn "><i class="icon-edit"></i> <?php _("Change")?></button></div></form>
+  		<form id="formfan" class="navbar-form pull-left span2"><div class="input-append"><input id="newfan" type="text" style="width:40px" class="inputonline"/> <button id="sendfan" class="btn inputonline"><i class="icon-edit"></i> <?php _("Change")?></button></div></form>
 			</div>
 {{#extruder}}
 			<div class="row">
@@ -263,8 +269,9 @@
 				<span class="span2"><a href="#dialog-extruder{{extrudernum}}" data-toggle="modal" class="btn btn-small btn-primary inputonline"><i class="icon-bolt"></i> <?php _("Change") ?></a></span>
 			</div>
 {{/extruder}}
+{{#if hasHeatedBed}}
 			<div class="row">
-				<div class="span2">Heated bed</div>
+				<div class="span2"><?php _("Heated Bed")?></div>
 				<div class="span6">
 					<div class="progress">
 				  	<div id="bed_progg" class="bar bar-success" style="width: 0%;"></div>
@@ -277,6 +284,7 @@
 				</div>
 				<span class="span2"><a href="#dialog-bed" data-toggle="modal" class="btn btn-small btn-primary inputonline"><i class="icon-bolt"></i> <?php _("Change") ?></a></span>
 			</div>
+{{/hasHeatedBed}}
 		</div> {{! End control panel }}		
 </div></div>
 
@@ -402,6 +410,7 @@ function updateLog() {
   	   i++;
   	});
   	// Heated bed temp
+{{#if hasHeatedBed}}
   	   pre = '#bed_';
   	   $(pre+"temp").html(state.bedTempRead.toFixed(2));
   	   if(state.bedTempSet<20) $(pre+"set").html("<?php _("Off")?>");
@@ -413,6 +422,8 @@ function updateLog() {
   	   else $(pre+"progy").css("width",(state.bedTempRead<70? "0%" : "63.333%"));
   	   if(state.bedTempRead>260) $(pre+"progr").css("width",(state.bedTempRead-260)*26.666/40+"%");
   	   else $(pre+"progr").css("width","0%");
+{{/hasHeatedBed}}
+
 			 $('#speedval').html(state.speedMultiply);  	
 			 $('#flowval').html(state.flowMultiply);
 			 if(state.fanVoltage==0) $('#fanval').html('<?php _("Off")?>');
@@ -527,7 +538,7 @@ function refreshModels() {
 	setTimeout('refreshModels();',10963);
 }
 function updateModels(data) {
-	  if(!data.data)  return;
+	  if(!data.data) {return;}
 		s = '';
   	$.each(data.data, function(key,val) {
   		s+='<tr><td>'+htmlescape(val.name)+'</td><td>'+sizeText(val.length)+'</td><td>'+jobstatusText(val.state,false)+'</td><td>';
@@ -591,7 +602,7 @@ $(document).ready(function() {
 		$('#formuploadjob').ajaxSubmit(function(data) {
 		  $('#startjobupload').button('reset');
 	 	 	$('#dialog-uploadjob').modal('hide');
-	 	 	updateJobs(data);
+	 	 	updateJobs(jQuery.parseJSON(data));
 		});
 		return false;
 	});
@@ -600,7 +611,7 @@ $(document).ready(function() {
 		$('#formuploadmodel').ajaxSubmit(function(data) {	
 		  $('#startmodelupload').button('reset');
 	 	 	$('#dialog-uploadmodel').modal('hide');
-	 	 	updateModels(data);
+	 	 	updateModels(jQuery.parseJSON(data));
 		});
 		return false;
 	});

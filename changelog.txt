@@ -1,0 +1,6 @@
+Version 0.24:
+	* Upgrade fontawsome to version 3.0.2
+	* Auto detect browser language for interface
+	* Interface improved
+	* Fixed memory bug
+	

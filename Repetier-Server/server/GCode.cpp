@@ -104,7 +104,7 @@ void GCode::parse(Printer *printer) {
     }
     comment = fields == 128;
 }
-GCodeDataPacket* GCode::getBinary()
+GCodeDataPacketPtr GCode::getBinary()
 {
     uint8_t data[128];
     int datalen=0;
@@ -165,9 +165,9 @@ GCodeDataPacket* GCode::getBinary()
     data[datalen++] = bsum2;
     uint8_t *dp = new uint8_t[datalen];
     memcpy(dp,data,datalen);
-    return new GCodeDataPacket(datalen,dp);
+    return shared_ptr<GCodeDataPacket>(new GCodeDataPacket(datalen,dp));
 }
-GCodeDataPacket* GCode::getAscii(bool inclLine,bool inclChecksum)
+GCodeDataPacketPtr GCode::getAscii(bool inclLine,bool inclChecksum)
 {
     string st;
     char b[100];
@@ -274,7 +274,7 @@ GCodeDataPacket* GCode::getAscii(bool inclLine,bool inclChecksum)
     st+='\n';
     uint8_t *dp = new uint8_t[st.length()];
     memcpy(dp,st.c_str(),st.length());
-    return new GCodeDataPacket((int)st.length(),dp);
+    return shared_ptr<GCodeDataPacket>(new GCodeDataPacket((int)st.length(),dp));
 }
 void GCode::ActivateV2OrForceAscii(Printer *printer)
 {

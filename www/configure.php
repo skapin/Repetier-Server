@@ -2,6 +2,9 @@
 <html>
 <head>
 <meta charset="utf-8"/>
+<link rel="apple-touch-icon" href="/touch-icon-iphone.png" />
+<link rel="apple-touch-icon" sizes="72x72" href="/touch-icon-ipad.png" />
+<link rel="apple-touch-icon" sizes="114x114" href="/touch-icon-iphone4.png" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="/bt/css/bootstrap.css" rel="stylesheet">
     <link rel="stylesheet" href="/bt/css/font-awesome.css">

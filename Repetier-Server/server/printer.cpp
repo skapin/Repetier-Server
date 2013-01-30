@@ -78,7 +78,8 @@ Printer::Printer(string conf) {
         ok &= config.lookupValue("printer.speed.zaxis", speedz);
         ok &= config.lookupValue("printer.speed.eaxisExtrude", speedeExtrude);
         ok &= config.lookupValue("printer.speed.eaxisRetract", speedeRetract);
-        
+        if(!config.lookupValue("printer.extruder.heatedBed",hasHeatedBed))
+            hasHeatedBed = true;
         if(!ok) {
             RLog::log("Printer configuration @ not complete",conf,true);
             exit(4);
@@ -307,7 +308,7 @@ void Printer::stopPause() {
     mutex::scoped_lock l(sendMutex);
     paused = false;
 }
-bool Printer::trySendPacket(GCodeDataPacket *dp,shared_ptr<GCode> &gc) {
+bool Printer::trySendPacket(GCodeDataPacketPtr &dp,shared_ptr<GCode> &gc) {
     if((pingpong && readyForNextSend) || (!pingpong && cacheSize>receiveCacheFill+dp->length)) {
         serial->writeBytes(dp->data,dp->length);
         if(!pingpong) {
@@ -349,7 +350,7 @@ void Printer::trySendNextLine() {
     if (pingpong && !readyForNextSend) {return;}
     if (!serial->isConnected()) {return;} // Not ready yet
     shared_ptr<GCode> gc;
-    GCodeDataPacket *dp = NULL;
+    GCodeDataPacketPtr dp;
     // first resolve old communication problems
     if (resendLines.size()>0) {
         gc = resendLines.front();
@@ -516,6 +517,7 @@ void Printer::fillJSONObject(json_spirit::Object &obj) {
     obj.push_back(Pair("speedeExtrude",speedeExtrude));
     obj.push_back(Pair("speedeRetract",speedeRetract));
     obj.push_back(Pair("extruderCount",extruderCount));
+    obj.push_back(Pair("hasHeatedBed",hasHeatedBed));
     Array ea;
     for(int i=0;i<extruderCount;i++) {
         Object e;

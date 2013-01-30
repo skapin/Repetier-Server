@@ -21,9 +21,12 @@
 
 #include <iostream>
 #include <boost/cstdint.hpp>
+#include <boost/shared_ptr.hpp>
+
 using namespace boost;
 
 class Printer;
+
 
 class GCodeDataPacket {
 public:
@@ -32,6 +35,8 @@ public:
     int length;
     uint8_t *data;
 };
+typedef boost::shared_ptr<GCodeDataPacket> GCodeDataPacketPtr;
+
 class GCode {
     void ActivateV2OrForceAscii(Printer *printer);
     void parse(Printer *printer);
@@ -84,8 +89,8 @@ public:
     inline float getF() {return f;}
     inline const std::string& getOriginal() {return orig;}
     void setN(int32_t line);
-    GCodeDataPacket *getAscii(bool inclLine,bool inclChecksum);
-    GCodeDataPacket *getBinary();
+    GCodeDataPacketPtr getAscii(bool inclLine,bool inclChecksum);
+    GCodeDataPacketPtr getBinary();
     std::string hostCommandPart();
     std::string hostParameter();
 };
