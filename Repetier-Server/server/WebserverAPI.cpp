@@ -115,7 +115,7 @@ namespace repetier {
         // Figure out total content length. Return if it is not present or invalid.
         cl_header = mg_get_header(conn, "Content-Length");
         if (cl_header == NULL || (cl = strtoll(cl_header, NULL, 10)) <= 0) {
-            mg_printf(conn, "%s%s", HTTP_500, "Invalid Conent-Length");
+            mg_printf(conn, "%s%s", HTTP_500, "Invalid Content-Length");
             return false;
         }
         
