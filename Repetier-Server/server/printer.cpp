@@ -329,7 +329,8 @@ bool Printer::trySendPacket(GCodeDataPacketPtr &dp,shared_ptr<GCode> &gc) {
 // Extract the value following a identifier ident until the next space or line end.
 bool Printer::extract(const string& source,const string& ident,string &result)
 {
-    size_t pos = 0; source.find(ident);
+    size_t pos = 0; //source.find(ident);
+    size_t len = source.length();
     do
     {
         if(pos>0) pos++;
@@ -338,8 +339,8 @@ bool Printer::extract(const string& source,const string& ident,string &result)
         if(pos==0) break;
     } while (source[pos-1]!=' ');
     size_t start = pos + ident.length();
+    while(start<len && source[pos]==' ') start++;
     size_t end = start;
-    size_t len = source.length();
     while (end < len && source[end] != ' ') end++;
     result = source.substr(start,end-start);
     return true;

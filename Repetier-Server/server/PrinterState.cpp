@@ -258,9 +258,10 @@ void PrinterState::analyze(GCode &code)
     }
 }
 // Extract the value following a identifier ident until the next space or line end.
-bool PrinterState::extract(const string& source,const string& ident,string &result)
+bool Printer::extract(const string& source,const string& ident,string &result)
 {
-    size_t pos = 0; source.find(ident);
+    size_t pos = 0; //source.find(ident);
+    size_t len = source.length();
     do
     {
         if(pos>0) pos++;
@@ -269,12 +270,13 @@ bool PrinterState::extract(const string& source,const string& ident,string &resu
         if(pos==0) break;
     } while (source[pos-1]!=' ');
     size_t start = pos + ident.length();
+    while(start<len && source[pos]==' ') start++;
     size_t end = start;
-    size_t len = source.length();
     while (end < len && source[end] != ' ') end++;
     result = source.substr(start,end-start);
     return true;
 }
+
 void PrinterState::analyseResponse(const string &res,uint8_t &rtype) {
     mutex::scoped_lock l(mutex);
     string h;
