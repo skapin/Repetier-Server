@@ -258,7 +258,7 @@ void PrinterState::analyze(GCode &code)
     }
 }
 // Extract the value following a identifier ident until the next space or line end.
-bool Printer::extract(const string& source,const string& ident,string &result)
+bool PrinterState::extract(const string& source,const string& ident,string &result)
 {
     size_t pos = 0; //source.find(ident);
     size_t len = source.length();
