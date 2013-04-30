@@ -309,7 +309,30 @@ namespace repetier {
                     }
                 }
                 printer->getJobManager()->fillSJONObject("data",ret);                
+            } else if(a=="pause") { //Pause a job/the printer. Memorize the current Printer state (see PrinterState).
+                string sid;
+                if(MG_getVar(ri,"id",sid)) {
+                    int id = atoi(sid.c_str());
+                    PrintjobPtr job = printer->getJobManager()->findById(id);
+                    if(job.get()) {
+                        printer->getJobManager()->pauseJob(id);
+                        printer->getScriptManager()->pushCompleteJob("Pause");
+                    }
+                }
+                printer->getJobManager()->fillSJONObject("data",ret);
+            } else if(a=="unpause") {
+                string sid;
+                if(MG_getVar(ri,"id",sid)) {
+                    int id = atoi(sid.c_str());
+                    PrintjobPtr job = printer->getJobManager()->findById(id);
+                    if(job.get()) {
+                        printer->getJobManager()->unpauseJob(id);
+                        printer->getScriptManager()->pushCompleteJob("Unpause");
+                    }
+                }
+                printer->getJobManager()->fillSJONObject("data",ret);
             }
+
         } else if(cmdgroup=="model") {
             string a;
             MG_getVar(ri,"a",a);

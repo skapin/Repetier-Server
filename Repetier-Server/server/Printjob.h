@@ -27,12 +27,15 @@
 #include <fstream>
 #include <boost/cstdint.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
+#include "PrinterState.h"
+
 using namespace boost;
 
 class Printer;
+class PrinterState;
 class Printjob {
 public:
-    enum PrintjobState {startUpload,stored,running,finished,doesNotExist};
+    enum PrintjobState {startUpload,stored,running,finished,doesNotExist,paused};
     
     Printjob(std::string _file,bool newjob,bool _script=false);
     
@@ -44,6 +47,7 @@ public:
     inline void setFilename(std::string fname) {file = fname;}
     inline void setStored() {state = stored;}
     inline void setRunning() {state = running;}
+    inline void setPaused() {state = paused;}
     inline PrintjobState getState() {return state;}
     inline void setLength(size_t l) {length = l;}
     inline void setPos(long long p) {pos = p;}
@@ -96,6 +100,12 @@ public:
     void RemovePrintjob(PrintjobPtr job);
     void startJob(int id);
     void killJob(int id);
+    void unpauseJob(int id);
+    /**
+     * @brief pauseJob Pause a job. Memorize his previous state
+     * @param id
+     */
+    void pauseJob(int id);
     /** Kills the current job without removing it from queue. This
      is needed in case the printer gets disconnected. */
     void undoCurrentJob();

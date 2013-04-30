@@ -80,7 +80,7 @@ class PrinterState {
     int flowMultiply;
     PrinterTemp& getExtruder(int extruderId);
     
-    double pauseX,pauseY,pauseZ,pauseE,pauseF;
+    double pauseX,pauseY,pauseZ,pauseE,pauseF,pauseTemp;
     bool pauseRelative;
 public:
     

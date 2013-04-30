@@ -166,22 +166,25 @@ void PrintjobManager::fillSJONObject(std::string name,json_spirit::Object &o) {
         j.push_back(Pair("name",job->getName()));
         j.push_back(Pair("length",(int)job->getLength()));
         switch(job->getState()) {
-            case Printjob::startUpload:
-                j.push_back(Pair("state","uploading"));
-                break;
-            case Printjob::stored:
-                j.push_back(Pair("state","stored"));
-                break;
-            case Printjob::running:
-                j.push_back(Pair("state","running"));
-                j.push_back(Pair("done",job->percentDone()));
-                break;
-            case Printjob::finished:
-                j.push_back(Pair("state","finsihed"));
-                break;
-            case Printjob::doesNotExist:
-                j.push_back(Pair("state","error"));
-                break;
+        case Printjob::startUpload:
+            j.push_back(Pair("state","uploading"));
+            break;
+        case Printjob::stored:
+            j.push_back(Pair("state","stored"));
+            break;
+        case Printjob::running:
+            j.push_back(Pair("state","running"));
+            j.push_back(Pair("done",job->percentDone()));
+            break;
+        case Printjob::finished:
+            j.push_back(Pair("state","finsihed"));
+            break;
+        case Printjob::doesNotExist:
+            j.push_back(Pair("state","error"));
+            break;
+        case Printjob::paused:
+            j.push_back(Pair("state","paused"));
+            break;
         }
         a.push_back(j);
     }
@@ -295,6 +298,19 @@ void PrintjobManager::killJob(int id) {
     l2.unlock();
     printer->getScriptManager()->pushCompleteJob("End");
 }
+void PrintjobManager::pauseJob(int id) {
+    mutex::scoped_lock l(filesMutex);
+    printer->paused = true;
+    runningJob->setPaused();
+    printer->state->storePause();
+
+}
+void PrintjobManager::unpauseJob(int id) {
+    mutex::scoped_lock l(filesMutex);
+    runningJob->setRunning();
+    printer->stopPause();
+}
+
 void PrintjobManager::undoCurrentJob() {
     mutex::scoped_lock l(filesMutex);
     if(!runningJob.get()) return; // no running job

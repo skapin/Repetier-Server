@@ -469,16 +469,30 @@ void PrinterState::fillJSONObject(json_spirit::Object &obj) {
     obj.push_back(Pair("extruder",ea));
 }
 void PrinterState::storePause() {
+    char buf[200];
+
     pauseX = x-xOffset;
     pauseY = y-yOffset;
     pauseZ = z-zOffset;
     pauseE = e-eOffset;
     pauseF = f;
     pauseRelative = relative;
+    pauseTemp = getExtruder(-1).tempSet;
+
+    sprintf(buf,"G1 Z%.2f F%.0f",pauseZ+30.0,printer->speedz*60.0); // we move the head up. It's very usefull cause we dont want the head to stay close to the work.
+    //So, the hot plastic can flow out of the head freely, without dammaging the work.
+    printer->injectManualCommand(buf);
+
+    printer->injectManualCommand("G90");
+    sprintf(buf,"G92 E%.4f",pauseE-4.0);// we retract a little bit. It's needed because we handle hot PLA/ABS inside the head (dilatation etc..).
 }
 void PrinterState::injectUnpause() {
     char buf[200];
+
     printer->injectManualCommand("G90");
+
+    sprintf(buf,"M109 S%.4f",pauseTemp); // Set and wait the old temperature.
+    printer->injectManualCommand(buf);
     sprintf(buf,"G1 X%.2f Y%.2f F%.0f",pauseX,pauseY,printer->speedx*60.0);
     printer->injectManualCommand(buf);
     sprintf(buf,"G1 Z%.2f F%.0f",pauseZ,printer->speedz*60.0);
