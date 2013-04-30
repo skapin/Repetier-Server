@@ -437,6 +437,7 @@ function jobstatusText(st,job) {
 	if(st=='stored') return (job ? '<?php _("Waiting for print") ?>' : '<?php _("Stored") ?>');
 	if(st=='running') return '<?php _("Printing ...") ?>';
 	if(st=='uploading') return '<?php _("Uploading ...") ?>';
+	if(st=='paused') return '<?php _("Paused.") ?>';
 	return st;
 }
 function sizeText(sz) {
@@ -463,6 +464,28 @@ function stopJob(id) {
     "class" : "btn-danger",
     "callback": function() {
         $.getJSON('/printer/job/{{slug}}?a=stop&id='+id,function(data) {updateJobs(data);});
+    }
+	}, {
+    "label" : "<?php _("No")?>","class":"btn"
+	}]);
+}
+function pauseJob(id) {
+	bootbox.dialog("<?php _("Do you really want to pause this job?")?>", [{
+    "label" : "<?php _("Yes")?>",
+    "class" : "btn-danger",
+    "callback": function() {
+        $.getJSON('/printer/job/{{slug}}?a=pause&id='+id,function(data) {updateJobs(data);});
+    }
+	}, {
+    "label" : "<?php _("No")?>","class":"btn"
+	}]);
+}
+function unpauseJob(id) {
+	bootbox.dialog("<?php _("Do you really want to continue this job?")?>", [{
+    "label" : "<?php _("Yes")?>",
+    "class" : "btn-danger",
+    "callback": function() {
+        $.getJSON('/printer/job/{{slug}}?a=unpause&id='+id,function(data) {updateJobs(data);});
     }
 	}, {
     "label" : "<?php _("No")?>","class":"btn"
@@ -515,9 +538,16 @@ function updateJobs(data) {
   		s+='<tr><td>'+htmlescape(val.name)+'</td><td>'+sizeText(val.length)+'</td><td>'+jobstatusText(val.state,true)+
   		 (val.state=='running'?' '+val.done.toFixed(1)+"%":"")+'</td><td>';
   		if(val.state=='running') {
+			s+='<button class="btn btn-small btn-danger" onclick="pauseJob('+val.id+')"><i class="icon-pause"></i> <?php _("Pause") ?></button>';
   			s+='<button class="btn btn-small btn-danger" onclick="stopJob('+val.id+')"><i class="icon-stop"></i> <?php _("Stop") ?></button>';
   			newjobrunning = true;
-  		} else {
+  		}
+		else if (val.state=='paused') 
+		{
+			s+='<button class="btn btn-small btn-danger" onclick="unpauseJob('+val.id+')"><i class="icon-play"></i> <?php _("Continue") ?></button>';
+			s+='<button class="btn btn-small btn-danger" onclick="stopJob('+val.id+')"><i class="icon-stop"></i> <?php _("Stop") ?></button>';
+		}
+		else {
   		  if(!jobrunning && !newjobrunning)
 	  			s+='<button class="btn btn-small btn-success" onclick="startJob('+val.id+')"><i class="icon-play"></i> <?php _("Start") ?></button> ';
   			s+='<button class="btn btn-small btn-danger" onclick="delJob('+val.id+')"><i class="icon-trash"></i> <?php _("Delete") ?></button>';
@@ -533,7 +563,7 @@ function updateJobs(data) {
 }
 function refreshModels() {
 	$.getJSON('/printer/model/{{slug}}?a=list', function(data) {
-		updateModels(data);
+		updateModels(data);	
 	});
 	setTimeout('refreshModels();',10963);
 }
